@@ -6,6 +6,7 @@
         <v-card variant="outlined">
           главная
         </v-card>
+        <v-btn variant="outlined">записаться</v-btn>
       </v-col>
     </v-row>
   </v-container>
