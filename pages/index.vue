@@ -1,4 +1,5 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
@@ -7,6 +8,22 @@
           главная
         </v-card>
         <v-btn variant="outlined">записаться</v-btn>
+        <v-btn variant="outlined">
+          Button
+        </v-btn>
+        <v-divider color="error"></v-divider>
+
+        <v-expansion-panels>
+          <v-expansion-panel title="Title"
+            text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi, ratione debitis quis est labore voluptatibus! Eaque cupiditate minima">
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+
+
+        <h1>Домашка:</h1>
+        <MyComponent1 />
+        <!-- сюда писать все 3-5 компонент написать -->
       </v-col>
     </v-row>
   </v-container>
