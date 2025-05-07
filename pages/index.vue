@@ -23,6 +23,11 @@
 
         <h1>Домашка:</h1>
         <MyComponent1 />
+        <MyComponent2 />
+        <MyComponent3 />
+        <MyComponent4 />
+        <MyComponent5 />
+        <MyComponent6 />
         <!-- сюда писать все 3-5 компонент написать -->
       </v-col>
     </v-row>
