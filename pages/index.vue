@@ -1,10 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="10" xl="8" class="d-flex justify-center">
-        <v-btn variant="tonal"> Записаться </v-btn>
-        <GlowBorderButton></GlowBorderButton>
+          <v-btn variant="tonal">
+            Записаться
+          </v-btn>
       </v-col>
     </v-row>
   </v-container>
