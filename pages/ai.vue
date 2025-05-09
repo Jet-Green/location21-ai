@@ -1,12 +1,16 @@
 <script setup lang="ts">
 async function submit() {
   try {
-    const response: any = await $fetch("https://functions.yandexcloud.net/d4eajvq0hfqcsdii8ge1", {
+    let response = await fetch("https://functions.yandexcloud.net/d4eajvq0hfqcsdii8ge1", {
       method: "POST",
-      body: {
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
         userInput: "Привет"
-      }
-    })
+      })
+    });
     if (response.status == 200) {
       console.log(response);
     }
