@@ -23,6 +23,18 @@ export default defineNuxtConfig({
     },
     //...
   ],
+  app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }, // Nuxt 3 ожидает здесь пустую строку для атрибутов без значения
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap' // Обновленная ссылка для всех начертаний Montserrat
+        }
+      ]
+    }
+  },
   vite: {
     vue: {
       template: {
