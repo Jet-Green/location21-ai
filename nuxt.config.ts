@@ -7,6 +7,13 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  css: ['~/assets/css/main.scss'],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
   modules: [
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
