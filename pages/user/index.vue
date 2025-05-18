@@ -1,7 +1,7 @@
 <script setup lang="ts">
-let greeting = "Савелий пикми носочки!";
+let greeting = "Привет Савелий пикми носочки";
 </script>
 <template>
-  <Math2 :message="greeting" />
-  <Math />
+  <Math2 />
+  <Math :message="greeting" />
 </template>
