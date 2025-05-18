@@ -1,3 +1,8 @@
+<script setup lang="ts">
+
+</script>
 <template>
-  user
+  <Math2 />
+  <Math />
+  <BackButton :buttonText="'привет'" />
 </template>
