@@ -1,8 +1,17 @@
 <script setup lang="ts">
+const router = useRouter()
+
+function goTo(path: string) {
+  router.push(path)
+}
 </script>
 <template>
   <v-container class="d-flex justify-center align-center">
     <v-row class="d-flex justify-center align-center">
+
+      <v-btn @click="goTo('/user')">to user index</v-btn>
+      <v-btn @click="goTo('/user/cabinet')">to user cabinet</v-btn>
+
       <v-col cols="12" class="d-flex justify-center" style="margin-top: 30vh;">
         <img src="~/assets/images/location21-logo.png" alt="" class="logo">
       </v-col>
