@@ -4,5 +4,4 @@
 <template>
   <Math2 />
   <Math />
-  <BackButton :buttonText="'привет'" />
 </template>
