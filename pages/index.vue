@@ -4,13 +4,15 @@
   <v-container class="d-flex justify-center align-center">
     <v-row class="d-flex justify-center align-center">
       <v-col cols="12" class="d-flex justify-center" style="margin-top: 30vh;">
-        <img src="~/assets/images/location21-logo.png" alt="" class="logo">
+        <img src="~/assets/images/Location_White_Color_Logo.png" alt="" class="logo">
       </v-col>
-      <v-col cols="12" class="d-flex justify-center">
-        <GradientButton :bg-color="'#000'" :borderRadius="8" :border-width="2" :blur="12"
-          :colors="['#D9D9D9', '#FF7878', '#FC5B5B', '#FFFFFF']" style="font-weight: 600;">
-          Записаться
-        </GradientButton>
+      <v-col cols="12" class="d-flex justify-center mt-16">
+        <NuxtLink to="https://n962263.yclients.com/company/894109/personal/menu?o=">
+          <GradientButton :bg-color="'#000'" :borderRadius="8" :border-width="2" :blur="12"
+            :colors="['#D9D9D9', '#FF7878', '#FC5B5B', '#FFFFFF']" style="font-weight: 600;">
+            Записаться
+          </GradientButton>
+        </NuxtLink>
       </v-col>
     </v-row>
   </v-container>
