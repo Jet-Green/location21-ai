@@ -7,6 +7,32 @@ let selectVariants = ref({
     "🧑 18–35 лет — для молодёжи",
     "🧔‍♂️ 35+ лет — для зрелого возраста",
     "👥 Все возрасты",
+  ],
+  hairStyling: [
+    "💨 — не требует укладки",
+    "🪮 — лёгкая укладка",
+    "🧴 — нужна стайлинг-продукция"
+  ],
+  haircutFrequency: [
+    "🗓️ — раз в месяц",
+    "⏳ — держит форму долго",
+    "🔁 — требует частого обновления"
+  ],
+  formalStyle: [
+    "💼 — деловой стиль",
+    "👔 — универсально",
+    "🧢 — повседневно"
+  ],
+  hairType: [
+    "➿ — вьющиеся",
+    "〰️ — прямые",
+    "🔁 — любые"
+  ],
+  faceShape: [
+    "🔵 — круглое",
+    "⬛ — квадратное",
+    "🔷 — ромбовидное",
+    "⭕ — универсально"
   ]
 })
 
@@ -26,12 +52,48 @@ watch(universal, (newValue) => {
     return;
   }
   let res = "";
-  for (let idx of universal.value) {
+  for (let idx of newValue) {
     res += selectVariants.value.universal[idx] + " ";
   }
   promptForm.value.universal = res;
 })
 
+let hairStyling = ref<number[]>([])
+watch(hairStyling, (newValue) => {
+  let res = "";
+  for (let idx of newValue) {
+    res += selectVariants.value.hairStyling[idx] + " ";
+  }
+  promptForm.value.hairStyling = res;
+})
+
+let haircutFrequency = ref<number[]>([])
+watch(haircutFrequency, (newValue) => {
+  let res = "";
+  for (let idx of newValue) {
+    res += selectVariants.value.haircutFrequency[idx] + " ";
+  }
+  promptForm.value.haircutFrequency = res;
+})
+
+let formalStyle = ref<number | null>(null)
+watch(formalStyle, (newValue: number | null) => {
+  if (newValue != null) {
+    promptForm.value.formalStyle = selectVariants.value.formalStyle[newValue];
+  }
+})
+let hairType = ref<number | null>(null)
+watch(hairType, (newValue: number | null) => {
+  if (newValue != null) {
+    promptForm.value.hairType = selectVariants.value.hairType[newValue];
+  }
+})
+let faceShape = ref<number | null>(null)
+watch(faceShape, (newValue: number | null) => {
+  if (newValue != null) {
+    promptForm.value.faceShape = selectVariants.value.faceShape[newValue];
+  }
+})
 /*
   1. Универсальность (насколько подходит разным типам внешности и возрастам)
   🧒 До 18 лет — подходит подросткам
@@ -78,11 +140,53 @@ watch(promptForm, (newValue) => {
     </template>
 
     <template v-slot:item.2>
-      <v-card flat>...</v-card>
+      <v-sheet>
+        <v-responsive class="overflow-y-auto">
+          <v-chip-group v-model="hairStyling" selected-class="text-primary" multiple column>
+            <v-chip v-for="tag in selectVariants.hairStyling" :key="tag" :text="tag" density="default"></v-chip>
+          </v-chip-group>
+        </v-responsive>
+      </v-sheet>
     </template>
 
     <template v-slot:item.3>
-      <v-card flat>...</v-card>
+      <v-sheet>
+        <v-responsive class="overflow-y-auto">
+          <v-chip-group v-model="haircutFrequency" selected-class="text-primary" multiple column>
+            <v-chip v-for="tag in selectVariants.haircutFrequency" :key="tag" :text="tag" density="default"></v-chip>
+          </v-chip-group>
+        </v-responsive>
+      </v-sheet>
+    </template>
+
+    <template v-slot:item.4>
+      <v-sheet>
+        <v-responsive class="overflow-y-auto">
+          <v-chip-group v-model="formalStyle" selected-class="text-primary" column>
+            <v-chip v-for="tag in selectVariants.formalStyle" :key="tag" :text="tag" density="default"></v-chip>
+          </v-chip-group>
+        </v-responsive>
+      </v-sheet>
+    </template>
+
+    <template v-slot:item.5>
+      <v-sheet>
+        <v-responsive class="overflow-y-auto">
+          <v-chip-group v-model="hairType" selected-class="text-primary" column>
+            <v-chip v-for="tag in selectVariants.hairType" :key="tag" :text="tag" density="default"></v-chip>
+          </v-chip-group>
+        </v-responsive>
+      </v-sheet>
+    </template>
+
+    <template v-slot:item.6>
+      <v-sheet>
+        <v-responsive class="overflow-y-auto">
+          <v-chip-group v-model="faceShape" selected-class="text-primary" column>
+            <v-chip v-for="tag in selectVariants.faceShape" :key="tag" :text="tag" density="default"></v-chip>
+          </v-chip-group>
+        </v-responsive>
+      </v-sheet>
     </template>
   </v-stepper>
 </template>
