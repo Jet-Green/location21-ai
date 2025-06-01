@@ -18,13 +18,19 @@ async function submit() {
         userInput: prompt.value
       })
     });
-    aiResponse.value = response
-    if (response.status == 200) {
-      console.log(response);
+
+    if (!response.ok) {
+      // the response isn't okay
+      console.log("response status isn't 200");
+      return;
     }
+    const data = await response.json();
+    // result.alternatives[0].message.text -- text of model response
+    console.log(data);
+
   } catch (error) {
     console.log(error);
-    aiResponse.value = error
+    aiResponse.value = JSON.stringify(error)
   }
 }
 </script>
@@ -32,12 +38,12 @@ async function submit() {
   <v-container>
     <v-row class="d-flex justify-center">
       <v-col cols="12" md="10" xl="8">
-        <v-textarea label="Запрос" variant="outlined" v-model="prompt"></v-textarea>
+        <PromptStepper></PromptStepper>
 
-        <v-btn @click="submit">
+        <!-- <v-btn @click="submit">
           Отправить
         </v-btn>
-        {{ aiResponse }}
+        {{ aiResponse }} -->
       </v-col>
     </v-row>
   </v-container>
