@@ -35,6 +35,10 @@ let selectVariants = ref({
     "⭕ — универсально"
   ]
 })
+let currentStep = ref<number>(1)
+let isLastStep = computed<boolean>(() => {
+  return currentStep.value === stepperItems.value.length;
+});
 
 let promptForm = ref({
   universal: "",
@@ -122,13 +126,32 @@ watch(faceShape, (newValue: number | null) => {
   🔷 — ромбовидное
   ⭕ — универсально
 */
+
 watch(promptForm, (newValue) => {
   console.log(newValue);
 
 }, { deep: true })
+
+
+function handleNextOrSubmit(defaultNextClickFn: any) {
+  console.log(defaultNextClickFn.onClick());
+
+  if (isLastStep.value) {
+    console.log('Submitting form data:', JSON.parse(JSON.stringify(promptForm.value)));
+  } else {
+    if (defaultNextClickFn && typeof defaultNextClickFn === 'function') {
+      defaultNextClickFn(); // This function is provided by v-stepper-actions to go to the next step
+    } else {
+      // Fallback if defaultNextClickFn is not provided or not a function
+      if (currentStep.value < stepperItems.value.length) {
+        currentStep.value++;
+      }
+    }
+  }
+}
 </script>
 <template>
-  <v-stepper :items="stepperItems">
+  <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад" hide-actions>
     <template v-slot:item.1>
       <v-sheet>
         <v-responsive class="overflow-y-auto">
@@ -188,5 +211,17 @@ watch(promptForm, (newValue) => {
         </v-responsive>
       </v-sheet>
     </template>
+    <v-stepper-actions>
+      <template v-slot:prev="{ props: prevProps }">
+        <v-btn v-bind="prevProps" text="Назад" variant="text">
+        </v-btn>
+      </template>
+      <v-spacer></v-spacer>
+      <template v-slot:next="{ props }">
+        <v-btn :color="isLastStep ? 'primary' : undefined" :variant="isLastStep ? 'flat' : 'text'"
+          @click="handleNextOrSubmit" :text="isLastStep ? 'Сгенерировать' : 'Далее'">
+        </v-btn>
+      </template>
+    </v-stepper-actions>
   </v-stepper>
 </template>
