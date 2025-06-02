@@ -105,6 +105,9 @@ function goToFormBeginning() {
           style="font-size: 10px; overflow-y: scroll;">
           <pre v-html="aiResponse"></pre>
           <v-btn class="mt-10" @click="goToFormBeginning">понял, на главную</v-btn>
+          <NuxtLink to="https://n962263.yclients.com/company/894109/personal/menu?o=" class="w-100">
+            <v-btn class="mt-2 w-100" color="accent">записаться</v-btn>
+          </NuxtLink>
         </div>
         <!-- <v-btn @click="submit">
           Отправить

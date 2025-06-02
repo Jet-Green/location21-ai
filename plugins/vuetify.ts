@@ -7,8 +7,16 @@ import { createVuetify } from 'vuetify'
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     theme: {
-      defaultTheme: 'dark'
-    }
+      defaultTheme: 'myCustomTheme',
+      themes: {
+        "myCustomTheme": {
+          dark: true,
+          colors: {
+            accent: "#EA4431"
+          }
+        }
+      }
+    },
   })
   app.vueApp.use(vuetify)
 })
