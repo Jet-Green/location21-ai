@@ -32,7 +32,7 @@ let aiResponse = ref<string>(`Для вас могут подойти следу
 * Форма лица: практически любая
 `)
 
-let formStatus = ref<'filling' | 'submitted' | 'finished'>('finished')
+let formStatus = ref<'filling' | 'submitted' | 'finished'>('filling')
 
 async function submit(promptForm: PromptForm) {
   formStatus.value = 'submitted';
