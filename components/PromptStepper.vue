@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import type { PromptForm } from "~/types/prompt-form.interface"
 
-let stepperItems = ref(['Универсальность', 'Уход', 'Периодичность коррекции', 'Формальность', 'Тип волос', 'Форма лица'])
+const emit = defineEmits(['submit'])
+
+
+let stepperItems = ref(['Универсальность', 'Уход', 'Периодичность коррекции', 'Формальность', 'Тип волос', 'Форма лица', 'Сгенерировать'])
 let selectVariants = ref({
   universal: [
     "🧒 До 18 лет — подросткам",
@@ -40,7 +44,7 @@ let isLastStep = computed<boolean>(() => {
   return currentStep.value === stepperItems.value.length;
 });
 
-let promptForm = ref({
+let promptForm = ref<PromptForm>({
   universal: "",
   hairStyling: "",
   haircutFrequency: "",
@@ -132,96 +136,85 @@ watch(promptForm, (newValue) => {
 
 }, { deep: true })
 
-
-function handleNextOrSubmit(defaultNextClickFn: any) {
-  console.log(defaultNextClickFn.onClick());
-
-  if (isLastStep.value) {
-    console.log('Submitting form data:', JSON.parse(JSON.stringify(promptForm.value)));
-  } else {
-    if (defaultNextClickFn && typeof defaultNextClickFn === 'function') {
-      defaultNextClickFn(); // This function is provided by v-stepper-actions to go to the next step
-    } else {
-      // Fallback if defaultNextClickFn is not provided or not a function
-      if (currentStep.value < stepperItems.value.length) {
-        currentStep.value++;
-      }
-    }
-  }
+function submit() {
+  emit("submit", promptForm.value)
 }
 </script>
 <template>
-  <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад" hide-actions>
-    <template v-slot:item.1>
-      <v-sheet>
-        <v-responsive class="overflow-y-auto">
-          <v-chip-group v-model="universal" selected-class="text-primary" multiple column>
-            <v-chip v-for="tag in selectVariants.universal" :key="tag" :text="tag" density="default"></v-chip>
-          </v-chip-group>
-        </v-responsive>
-      </v-sheet>
-    </template>
+  <ClientOnly>
 
-    <template v-slot:item.2>
-      <v-sheet>
-        <v-responsive class="overflow-y-auto">
-          <v-chip-group v-model="hairStyling" selected-class="text-primary" multiple column>
-            <v-chip v-for="tag in selectVariants.hairStyling" :key="tag" :text="tag" density="default"></v-chip>
-          </v-chip-group>
-        </v-responsive>
-      </v-sheet>
-    </template>
-
-    <template v-slot:item.3>
-      <v-sheet>
-        <v-responsive class="overflow-y-auto">
-          <v-chip-group v-model="haircutFrequency" selected-class="text-primary" multiple column>
-            <v-chip v-for="tag in selectVariants.haircutFrequency" :key="tag" :text="tag" density="default"></v-chip>
-          </v-chip-group>
-        </v-responsive>
-      </v-sheet>
-    </template>
-
-    <template v-slot:item.4>
-      <v-sheet>
-        <v-responsive class="overflow-y-auto">
-          <v-chip-group v-model="formalStyle" selected-class="text-primary" column>
-            <v-chip v-for="tag in selectVariants.formalStyle" :key="tag" :text="tag" density="default"></v-chip>
-          </v-chip-group>
-        </v-responsive>
-      </v-sheet>
-    </template>
-
-    <template v-slot:item.5>
-      <v-sheet>
-        <v-responsive class="overflow-y-auto">
-          <v-chip-group v-model="hairType" selected-class="text-primary" column>
-            <v-chip v-for="tag in selectVariants.hairType" :key="tag" :text="tag" density="default"></v-chip>
-          </v-chip-group>
-        </v-responsive>
-      </v-sheet>
-    </template>
-
-    <template v-slot:item.6>
-      <v-sheet>
-        <v-responsive class="overflow-y-auto">
-          <v-chip-group v-model="faceShape" selected-class="text-primary" column>
-            <v-chip v-for="tag in selectVariants.faceShape" :key="tag" :text="tag" density="default"></v-chip>
-          </v-chip-group>
-        </v-responsive>
-      </v-sheet>
-    </template>
-    <v-stepper-actions>
-      <template v-slot:prev="{ props: prevProps }">
-        <v-btn v-bind="prevProps" text="Назад" variant="text">
-        </v-btn>
+    <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад">
+      <template v-slot:item.1>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-chip-group v-model="universal" selected-class="text-primary" multiple column>
+              <v-chip v-for="tag in selectVariants.universal" :key="tag" :text="tag" density="default"></v-chip>
+            </v-chip-group>
+          </v-responsive>
+        </v-sheet>
       </template>
-      <v-spacer></v-spacer>
-      <template v-slot:next="{ props }">
-        <v-btn :color="isLastStep ? 'primary' : undefined" :variant="isLastStep ? 'flat' : 'text'"
-          @click="handleNextOrSubmit" :text="isLastStep ? 'Сгенерировать' : 'Далее'">
-        </v-btn>
+
+      <template v-slot:item.2>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-chip-group v-model="hairStyling" selected-class="text-primary" multiple column>
+              <v-chip v-for="tag in selectVariants.hairStyling" :key="tag" :text="tag" density="default"></v-chip>
+            </v-chip-group>
+          </v-responsive>
+        </v-sheet>
       </template>
-    </v-stepper-actions>
-  </v-stepper>
+
+      <template v-slot:item.3>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-chip-group v-model="haircutFrequency" selected-class="text-primary" multiple column>
+              <v-chip v-for="tag in selectVariants.haircutFrequency" :key="tag" :text="tag" density="default"></v-chip>
+            </v-chip-group>
+          </v-responsive>
+        </v-sheet>
+      </template>
+
+      <template v-slot:item.4>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-chip-group v-model="formalStyle" selected-class="text-primary" column>
+              <v-chip v-for="tag in selectVariants.formalStyle" :key="tag" :text="tag" density="default"></v-chip>
+            </v-chip-group>
+          </v-responsive>
+        </v-sheet>
+      </template>
+
+      <template v-slot:item.5>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-chip-group v-model="hairType" selected-class="text-primary" column>
+              <v-chip v-for="tag in selectVariants.hairType" :key="tag" :text="tag" density="default"></v-chip>
+            </v-chip-group>
+          </v-responsive>
+        </v-sheet>
+      </template>
+
+      <template v-slot:item.6>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-chip-group v-model="faceShape" selected-class="text-primary" column>
+              <v-chip v-for="tag in selectVariants.faceShape" :key="tag" :text="tag" density="default"></v-chip>
+            </v-chip-group>
+          </v-responsive>
+        </v-sheet>
+      </template>
+
+      <template v-slot:item.7>
+        <v-sheet>
+          <v-responsive class="overflow-y-auto">
+            <v-row>
+              <v-col cols="12" class="d-flex justify-center">
+                <v-btn @click="submit">отправить</v-btn>
+              </v-col>
+            </v-row>
+          </v-responsive>
+        </v-sheet>
+      </template>
+    </v-stepper>
+  </ClientOnly>
 </template>
