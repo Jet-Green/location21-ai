@@ -7,29 +7,25 @@ import type { PromptForm } from "~/types/prompt-form.interface"
 
 let aiResponse = ref<string>(`Для вас могут подойти следующие стрижки:
 
-1. **Фейд**
-* Универсальность: 8/10 (современная классика)
-* Уход: 7/10 (средней сложности)
-* Периодичность коррекции: 2–3 недели
-* Формальность: 7/10 (подходит для многих ситуаций)
-* Тип волос: любой
-* Форма лица: универсальная
+2. Цезарь
+Описание: Короткая стрижка с прямой чёлкой и чётким контуром.
+Фейд: Средний или высокий.
+Универсальность: Высокая
+Уход: Лёгкий
+Коррекция: Часто
+Формальность: Средне-высокая
+Тип волос: Прямые, волнистые
+Форма лица: Овальное, круглое
 
-2. **Цезарь**
-* Универсальность: 7/10 (классическая римская стрижка)
-* Уход: 8/10 (минимальный уход)
-* Периодичность коррекции: 3–4 недели
-* Формальность: 7/10 (достаточно формальная)
-* Тип волос: прямые, волнистые
-* Форма лица: овальная, треугольная
-
-3. **Сайд парт**
-* Универсальность: 9/10 (классика для мужчин любого возраста)
-* Уход: 6/10 (нужна укладка)
-* Периодичность коррекции: 3–4 недели
-* Формальность: 10/10 (идеально для бизнес-среды)
-* Тип волос: прямые, волнистые
-* Форма лица: практически любая
+3. Crew Cut
+Описание: Короткие волосы с чуть большей длиной на макушке, укладываются вбок.
+Фейд: Средний или высокий
+Универсальность: Очень высокая
+Уход: Лёгкий
+Коррекция: Средняя
+Формальность: Высокая
+Тип волос: Прямые
+Форма лица: Овальное, сердцевидное
 `)
 
 let formStatus = ref<'filling' | 'submitted' | 'finished'>('filling')
@@ -89,31 +85,27 @@ function goToFormBeginning() {
 <template>
   <v-container>
     <v-row class="d-flex justify-center">
-      <v-col cols="12" md="10" xl="8" class="d-flex justify-center align-center">
+      <v-col cols="12" md="10" xl="8" class="d-flex justify-center align-center flex-column">
         <PromptStepper @submit="submit" v-if="formStatus == 'filling'"></PromptStepper>
 
         <div v-else-if="formStatus == 'submitted'">
           <FallingStarsBg :color="'#555'" />
           <div class="z-[1]">
-            <p class="text-2xl mb-2">
-              ИИ Думает
-            </p>
-            <v-progress-linear indeterminate></v-progress-linear>
           </div>
         </div>
-        <div v-else-if="formStatus == 'finished'" class="d-flex justify-center flex-column"
-          style="font-size: 10px; overflow-y: scroll;">
-          <pre v-html="aiResponse"></pre>
-          <v-btn class="mt-10" @click="goToFormBeginning">понял, на главную</v-btn>
+        <div v-else-if="formStatus == 'finished'" class="d-flex justify-center flex-column">
+          <div class="ai-response-text">{{ aiResponse }}</div>
           <NuxtLink to="https://n962263.yclients.com/company/894109/personal/menu?o=" class="w-100">
-            <v-btn class="mt-2 w-100" color="accent">записаться</v-btn>
+            <v-btn class="mt-10 w-100" color="accent" size="x-large">записаться</v-btn>
           </NuxtLink>
+          <v-btn class="mt-5 mb-0" @click="goToFormBeginning" size="small">понял, на главную</v-btn>
         </div>
-        <!-- <v-btn @click="submit">
-          Отправить
-        </v-btn>
-        {{ aiResponse }} -->
       </v-col>
     </v-row>
   </v-container>
 </template>
+<style scoped lang="scss">
+.ai-response-text {
+  white-space: pre-wrap;
+}
+</style>

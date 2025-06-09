@@ -2,7 +2,7 @@
 import type { PromptForm } from "~/types/prompt-form.interface"
 
 const emit = defineEmits(['submit'])
-
+const router = useRouter();
 
 let stepperItems = ref(['Универсальность', 'Уход', 'Периодичность коррекции', 'Формальность', 'Тип волос', 'Форма лица', 'Сгенерировать'])
 let selectVariants = ref({
@@ -139,10 +139,13 @@ watch(promptForm, (newValue) => {
 function submit() {
   emit("submit", promptForm.value)
 }
+
+// function openYclients() {
+//   router.()
+// }
 </script>
 <template>
   <ClientOnly>
-
     <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад" mobile>
       <template v-slot:item.1>
         <v-sheet>
@@ -228,5 +231,16 @@ function submit() {
         </v-sheet>
       </template>
     </v-stepper>
+
+    <NuxtLink to="https://n962263.yclients.com/company/894109/personal/menu?o=">
+      <v-fab icon="mdi-lightbulb-on-outline" variant="tonal" class="floating-btn"></v-fab>
+    </NuxtLink>
   </ClientOnly>
 </template>
+<style scoped>
+.floating-btn {
+  position: absolute !important;
+  bottom: 25px !important;
+  right: 32px !important;
+}
+</style>
