@@ -143,10 +143,12 @@ function submit() {
 <template>
   <ClientOnly>
 
-    <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад">
+    <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад" mobile>
       <template v-slot:item.1>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
+            <p class="text-2xl font-medium mb-4">{{ stepperItems[0] }}</p>
+
             <v-chip-group v-model="universal" selected-class="text-primary" multiple column>
               <v-chip v-for="tag in selectVariants.universal" :key="tag" :text="tag" density="default"></v-chip>
             </v-chip-group>
@@ -157,6 +159,8 @@ function submit() {
       <template v-slot:item.2>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
+            <p class="text-2xl font-medium mb-4">{{ stepperItems[1] }}</p>
+
             <v-chip-group v-model="hairStyling" selected-class="text-primary" multiple column>
               <v-chip v-for="tag in selectVariants.hairStyling" :key="tag" :text="tag" density="default"></v-chip>
             </v-chip-group>
@@ -167,6 +171,8 @@ function submit() {
       <template v-slot:item.3>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
+            <p class="text-2xl font-medium mb-4">{{ stepperItems[2] }}</p>
+
             <v-chip-group v-model="haircutFrequency" selected-class="text-primary" multiple column>
               <v-chip v-for="tag in selectVariants.haircutFrequency" :key="tag" :text="tag" density="default"></v-chip>
             </v-chip-group>
@@ -177,6 +183,8 @@ function submit() {
       <template v-slot:item.4>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
+            <p class="text-2xl font-medium mb-4">{{ stepperItems[3] }}</p>
+
             <v-chip-group v-model="formalStyle" selected-class="text-primary" column>
               <v-chip v-for="tag in selectVariants.formalStyle" :key="tag" :text="tag" density="default"></v-chip>
             </v-chip-group>
@@ -187,6 +195,8 @@ function submit() {
       <template v-slot:item.5>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
+            <p class="text-2xl font-medium mb-4">{{ stepperItems[4] }}</p>
+
             <v-chip-group v-model="hairType" selected-class="text-primary" column>
               <v-chip v-for="tag in selectVariants.hairType" :key="tag" :text="tag" density="default"></v-chip>
             </v-chip-group>
@@ -197,6 +207,8 @@ function submit() {
       <template v-slot:item.6>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
+            <p class="text-2xl font-medium mb-4">{{ stepperItems[5] }}</p>
+
             <v-chip-group v-model="faceShape" selected-class="text-primary" column>
               <v-chip v-for="tag in selectVariants.faceShape" :key="tag" :text="tag" density="default"></v-chip>
             </v-chip-group>
@@ -206,10 +218,10 @@ function submit() {
 
       <template v-slot:item.7>
         <v-sheet>
-          <v-responsive class="overflow-y-auto">
+          <v-responsive class="overflow-y-auto py-5">
             <v-row>
               <v-col cols="12" class="d-flex justify-center">
-                <v-btn @click="submit">отправить</v-btn>
+                <v-btn @click="submit" block color="accent">отправить</v-btn>
               </v-col>
             </v-row>
           </v-responsive>
