@@ -5,30 +5,24 @@ definePageMeta({
 
 import type { PromptForm } from "~/types/prompt-form.interface"
 
-let aiResponse = ref<string>(`Для вас могут подойти следующие стрижки:
+let aiResponse = ref<{ id: string, description: string, images: string[] }[]>([
+  {
+    "id": "12",
+    "description": "Buzz Cut(Ежик)\nОписание: Короткая машинная стрижка под одну насадку по всей голове.\nФейд: По желанию(чаще высокий).\nУниверсальность: Максимальная\nУход: Минимальный\nКоррекция: Часто(2–3 недели)\nФормальность: Высокая\nТип волос: Любой\nФорма лица: Овальное, квадратное\n",
+    "images": [
+      "https://storage.yandexcloud.net/location21/result-images/IMG_9528.JPG"
+    ]
+  },
+  {
+    "id": "13",
+    "description": "Цезарь\nОписание: Короткая стрижка с прямой чёлкой и чётким контуром.\nФейд: Средний или высокий.\nУниверсальность: Высокая\nУход: Лёгкий\nКоррекция: Часто\nФормальность: Средне - высокая\nТип волос: Прямые, волнистые\nФорма лица: Овальное, круглое\n",
+    "images": [
+      "https://storage.yandexcloud.net/location21/result-images/IMG_9527.WEBP"
+    ]
+  }
+])
 
-2. Цезарь
-Описание: Короткая стрижка с прямой чёлкой и чётким контуром.
-Фейд: Средний или высокий.
-Универсальность: Высокая
-Уход: Лёгкий
-Коррекция: Часто
-Формальность: Средне-высокая
-Тип волос: Прямые, волнистые
-Форма лица: Овальное, круглое
-
-3. Crew Cut
-Описание: Короткие волосы с чуть большей длиной на макушке, укладываются вбок.
-Фейд: Средний или высокий
-Универсальность: Очень высокая
-Уход: Лёгкий
-Коррекция: Средняя
-Формальность: Высокая
-Тип волос: Прямые
-Форма лица: Овальное, сердцевидное
-`)
-
-let formStatus = ref<'filling' | 'submitted' | 'finished'>('filling')
+let formStatus = ref<'filling' | 'submitted' | 'finished'>('finished')
 
 async function submit(promptForm: PromptForm) {
   formStatus.value = 'submitted';
@@ -70,11 +64,9 @@ async function submit(promptForm: PromptForm) {
     // result.alternatives[0].message.text -- text of model response
     console.log(data);
     formStatus.value = 'finished';
-    aiResponse.value = data.result.alternatives[0].message.text;
-
+    aiResponse.value = data;
   } catch (error) {
     console.log(error);
-    aiResponse.value = JSON.stringify(error)
   }
 }
 
@@ -94,7 +86,15 @@ function goToFormBeginning() {
           </div>
         </div>
         <div v-else-if="formStatus == 'finished'" class="d-flex justify-center flex-column">
-          <div class="ai-response-text">{{ aiResponse }}</div>
+          <v-row v-for="(crop, index) of aiResponse" :key="index">
+            <v-col cols="12">
+              <div class="ai-response-text" v-text="crop.description"></div>
+            </v-col>
+
+            <v-col cols="12" v-for="(img, index) of crop.images">
+              <v-img :src="img" />
+            </v-col>
+          </v-row>
           <NuxtLink to="https://n962263.yclients.com/company/894109/personal/menu?o=" class="w-100">
             <v-btn class="mt-10 w-100" color="accent" size="x-large">записаться</v-btn>
           </NuxtLink>
