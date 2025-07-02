@@ -36,7 +36,12 @@ let selectVariants = ref({
     "🔵 — круглое",
     "⬛ — квадратное",
     "🔷 — ромбовидное",
-    "⭕ — универсально"
+    "🤷🏻‍♂️ — не знаю"
+  ],
+  additional: [
+    "🧔🏻‍♂️ — стрижка бороды",
+    "🧖🏻 — спа процедуры",
+    "💆🏻‍♂️ — массаж головы"
   ]
 })
 let currentStep = ref<number>(1)
@@ -51,6 +56,7 @@ let promptForm = ref<PromptForm>({
   formalStyle: "",
   hairType: "",
   faceShape: "",
+  additional: "",
 })
 
 let universal = ref<number[]>([])
@@ -100,6 +106,19 @@ let faceShape = ref<number | null>(null)
 watch(faceShape, (newValue: number | null) => {
   if (newValue != null) {
     promptForm.value.faceShape = selectVariants.value.faceShape[newValue];
+  }
+})
+
+let additional = ref<number[] | []>([])
+watch(additional, (newValue: number[] | []) => {
+  promptForm.value.additional = "";
+
+  for (let i = 0; i < newValue.length; i++) {
+    if (i == newValue.length - 1) {
+      promptForm.value.additional += selectVariants.value.additional[newValue[i]];
+      continue;
+    }
+    promptForm.value.additional += selectVariants.value.additional[newValue[i]] + ", ";
   }
 })
 /*
@@ -223,6 +242,16 @@ function submit() {
         <v-sheet>
           <v-responsive class="overflow-y-auto py-5">
             <v-row>
+              <v-col cols="12">
+                <p class="text-2xl font-medium mb-4">Доведите образ до совершенства</p>
+                <p class="font-light text-sm text-stone-100">Хорошая стрижка - 90% успеха, добавьте ещё 10% своим
+                  выбором</p>
+              </v-col>
+              <v-col cols="12">
+                <v-chip-group v-model="additional" selected-class="text-primary" column multiple>
+                  <v-chip v-for="tag in selectVariants.additional" :key="tag" :text="tag" density="default"></v-chip>
+                </v-chip-group>
+              </v-col>
               <v-col cols="12" class="d-flex justify-center">
                 <v-btn @click="submit" block color="accent">отправить</v-btn>
               </v-col>

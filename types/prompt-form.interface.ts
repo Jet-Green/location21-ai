@@ -5,4 +5,5 @@ export interface PromptForm {
   formalStyle: String
   hairType: String
   faceShape: String
+  additional: String
 }
