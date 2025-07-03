@@ -26,10 +26,11 @@ let aiResponse = ref<{ id: string, description: string, images: string[] }[]>([
 
 let formStatus = ref<'filling' | 'submitted' | 'finished'>('finished')
 let promptForm = ref<PromptForm>()
+let copyResultDialog = ref(false)
 
 let additionalInfo = computed(() => {
   if (promptForm.value?.additional) {
-    return "\nДополнительные услуги: " + promptForm.value?.additional;
+    return ", доп: " + promptForm.value?.additional;
   }
   return ""
 })
@@ -86,7 +87,7 @@ function goToFormBeginning() {
 
 async function copy(cropDescription: string) {
   let copiedCropName = cropDescription.split('\n')[0] // cropDescription is "Buzz Cut(Ежик)\nОписание: Короткая маш..."
-  let textToCopy = `Название стрижки: ${copiedCropName} \nМой выбор:\n`;
+  let textToCopy = `Название: ${copiedCropName} \nВыбор:\n`;
   /*
   1. Универсальность (насколько подходит разным типам внешности и возрастам)
   2. Уход (сложность ежедневной укладки)
@@ -95,22 +96,21 @@ async function copy(cropDescription: string) {
   5. Тип волос (для какой структуры волос идеальна)
   6. Форма лица (каким формам лица наиболее подходит)
   */
+
+
   // short copy, 150 letters is limit
-  textToCopy += `${promptForm.value?.universal ? promptForm.value?.universal + '\n' : ""}`
-  textToCopy += `${promptForm.value?.hairStyling ? promptForm.value?.hairStyling + '\n' : ""}`
-  textToCopy += `${promptForm.value?.haircutFrequency ? promptForm.value?.haircutFrequency + '\n' : ""}`
-  textToCopy += `${promptForm.value?.formalStyle ? promptForm.value?.formalStyle + '\n' : ""}`
-  textToCopy += `${promptForm.value?.hairType ? promptForm.value?.hairType + '\n' : ""}`
-  textToCopy += `${promptForm.value?.faceShape ? promptForm.value?.faceShape + '\n' : ""}`
+  textToCopy += `${promptForm.value?.universal ? promptForm.value?.universal + ', ' : ""}`
+  textToCopy += `${promptForm.value?.hairStyling ? promptForm.value?.hairStyling + ', ' : ""}`
+  textToCopy += `${promptForm.value?.haircutFrequency ? promptForm.value?.haircutFrequency + ', ' : ""}`
+  textToCopy += `${promptForm.value?.formalStyle ? promptForm.value?.formalStyle + ', ' : ""}`
+  textToCopy += `${promptForm.value?.hairType ? promptForm.value?.hairType + ', ' : ""}`
+  textToCopy += `${promptForm.value?.faceShape ? promptForm.value?.faceShape : ""}`
 
   textToCopy += additionalInfo.value;
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
     await navigator.clipboard.writeText(textToCopy)
-    toast("Скопировано!", {
-      type: "success",
-      autoClose: 700,
-    })
+    copyResultDialog.value = true;
   } else {
     const textarea = document.createElement("textarea");
     textarea.value = textToCopy;
@@ -118,10 +118,7 @@ async function copy(cropDescription: string) {
     textarea.select();
     try {
       document.execCommand("copy");
-      toast("Скопировано!", {
-        type: "success",
-        autoClose: 700,
-      })
+      copyResultDialog.value = true;
     } catch { }
     document.body.removeChild(textarea);
   }
@@ -170,6 +167,28 @@ async function copy(cropDescription: string) {
         </div>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="copyResultDialog" width="auto">
+      <v-card prepend-icon="mdi-check-circle-outline" title="Скопировано!">
+        <v-card-text>
+          <p class="text-sm text-center mt-4">Вставьте текст в <b>комментарий</b> к записи</p>
+          <div class="d-flex justify-center">
+            <v-icon>mdi-arrow-down-thin</v-icon>
+          </div>
+          <v-img src="../assets/images/copy-paste-example.png" min-width="400"></v-img>
+          <div class="d-flex justify-center">
+            <v-icon>mdi-arrow-down-thin</v-icon>
+          </div>
+          <p class="text-sm text-center mt-2">Мы <b>учтем</b> при стрижке!</p>
+        </v-card-text>
+        <template v-slot:actions>
+          <NuxtLink to="https://n962263.yclients.com/company/894109/personal/menu?o=" class="w-100">
+            <v-btn class="w-100" color="accent" size="x-large" text="понял, записаться" variant="tonal"
+              @click="copyResultDialog = false"></v-btn>
+          </NuxtLink>
+        </template>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <style scoped lang="scss">

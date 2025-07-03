@@ -5,45 +5,47 @@ const emit = defineEmits(['submit'])
 const router = useRouter();
 
 let stepperItems = ref(['Универсальность', 'Уход', 'Периодичность коррекции', 'Формальность', 'Тип волос', 'Форма лица', 'Сгенерировать'])
+
 let selectVariants = ref({
   universal: [
-    "🧒 До 18 лет — подросткам",
-    "🧑 18–35 лет — для молодёжи",
-    "🧔‍♂️ 35+ лет — для зрелого возраста",
-    "👥 Все возрасты",
+    { display: "🧒 До 18 лет — подросткам", value: "До 18 лет — подросткам" },
+    { display: "🧑 18–35 лет — для молодёжи", value: "18–35 лет — для молодёжи" },
+    { display: "🧔‍♂️ 35+ лет — для зрелого возраста", value: "35+ лет — для зрелого возраста" },
+    { display: "👥 Все возрасты", value: "Все возрасты" },
   ],
   hairStyling: [
-    "💨 — не требует укладки",
-    "🪮 — лёгкая укладка",
-    "🧴 — нужна стайлинг-продукция"
+    { display: "💨 — не требует укладки", value: "не требует укладки" },
+    { display: "🪮 — лёгкая укладка", value: "лёгкая укладка" },
+    { display: "🧴 — нужна стайлинг-продукция", value: "нужна стайлинг-продукция" }
   ],
   haircutFrequency: [
-    "🗓️ — раз в месяц",
-    "⏳ — держит форму долго",
-    "🔁 — требует частого обновления"
+    { display: "🗓️ — раз в месяц", value: "раз в месяц" },
+    { display: "⏳ — держит форму долго", value: "держит форму долго" },
+    { display: "🔁 — требует частого обновления", value: "требует частого обновления" }
   ],
   formalStyle: [
-    "💼 — деловой стиль",
-    "👔 — универсально",
-    "🧢 — повседневно"
+    { display: "💼 — деловой стиль", value: "деловой стиль" },
+    { display: "👔 — универсально", value: "универсально" },
+    { display: "🧢 — повседневно", value: "повседневно" }
   ],
   hairType: [
-    "➿ — вьющиеся",
-    "〰️ — прямые",
-    "🔁 — любые"
+    { display: "➿ — вьющиеся", value: "вьющиеся" },
+    { display: "〰️ — прямые", value: "прямые" },
+    { display: "🔁 — любые", value: "любые" }
   ],
   faceShape: [
-    "🔵 — круглое",
-    "⬛ — квадратное",
-    "🔷 — ромбовидное",
-    "🤷🏻‍♂️ — не знаю"
+    { display: "🔵 — круглое", value: "круглое" },
+    { display: "⬛ — квадратное", value: "квадратное" },
+    { display: "🔷 — ромбовидное", value: "ромбовидное" },
+    { display: "🤷🏻‍♂️ — не знаю", value: "не знаю" }
   ],
   additional: [
-    "🧔🏻‍♂️ — стрижка бороды",
-    "🧖🏻 — спа процедуры",
-    "💆🏻‍♂️ — массаж головы"
+    { display: "🧔🏻‍♂️ — стрижка бороды", value: "стрижка бороды" },
+    { display: "🧖🏻 — спа процедуры", value: "спа процедуры" },
+    { display: "💆🏻‍♂️ — массаж головы", value: "массаж головы" }
   ]
 })
+
 let currentStep = ref<number>(1)
 let isLastStep = computed<boolean>(() => {
   return currentStep.value === stepperItems.value.length;
@@ -67,112 +69,90 @@ watch(universal, (newValue) => {
   }
   let res = "";
   for (let idx of newValue) {
-    res += selectVariants.value.universal[idx] + " ";
+    // Берем только .value
+    res += selectVariants.value.universal[idx].value + " ";
   }
-  promptForm.value.universal = res;
+  promptForm.value.universal = res.trim();
 })
 
 let hairStyling = ref<number[]>([])
 watch(hairStyling, (newValue) => {
   let res = "";
   for (let idx of newValue) {
-    res += selectVariants.value.hairStyling[idx] + " ";
+    // Берем только .value
+    res += selectVariants.value.hairStyling[idx].value + " ";
   }
-  promptForm.value.hairStyling = res;
+  promptForm.value.hairStyling = res.trim();
 })
 
 let haircutFrequency = ref<number[]>([])
 watch(haircutFrequency, (newValue) => {
   let res = "";
   for (let idx of newValue) {
-    res += selectVariants.value.haircutFrequency[idx] + " ";
+    // Берем только .value
+    res += selectVariants.value.haircutFrequency[idx].value + " ";
   }
-  promptForm.value.haircutFrequency = res;
+  promptForm.value.haircutFrequency = res.trim();
 })
 
 let formalStyle = ref<number | null>(null)
 watch(formalStyle, (newValue: number | null) => {
   if (newValue != null) {
-    promptForm.value.formalStyle = selectVariants.value.formalStyle[newValue];
+    // Берем только .value
+    promptForm.value.formalStyle = selectVariants.value.formalStyle[newValue].value;
+  } else {
+    promptForm.value.formalStyle = "";
   }
 })
+
 let hairType = ref<number | null>(null)
 watch(hairType, (newValue: number | null) => {
   if (newValue != null) {
-    promptForm.value.hairType = selectVariants.value.hairType[newValue];
+    // Берем только .value
+    promptForm.value.hairType = selectVariants.value.hairType[newValue].value;
+  } else {
+    promptForm.value.hairType = "";
   }
 })
+
 let faceShape = ref<number | null>(null)
 watch(faceShape, (newValue: number | null) => {
   if (newValue != null) {
-    promptForm.value.faceShape = selectVariants.value.faceShape[newValue];
+    // Берем только .value
+    promptForm.value.faceShape = selectVariants.value.faceShape[newValue].value;
+  } else {
+    promptForm.value.faceShape = "";
   }
 })
 
 let additional = ref<number[] | []>([])
 watch(additional, (newValue: number[] | []) => {
-  promptForm.value.additional = "";
-
-  for (let i = 0; i < newValue.length; i++) {
-    if (i == newValue.length - 1) {
-      promptForm.value.additional += selectVariants.value.additional[newValue[i]];
-      continue;
-    }
-    promptForm.value.additional += selectVariants.value.additional[newValue[i]] + ", ";
-  }
+  // Собираем значения через map и join - это более кратко и чисто
+  promptForm.value.additional = newValue
+    .map(idx => selectVariants.value.additional[idx].value)
+    .join(', ');
 })
-/*
-  1. Универсальность (насколько подходит разным типам внешности и возрастам)
-  🧒 До 18 лет — подходит подросткам
-  🧑 18–35 лет — лучший выбор для молодёжи
-  🧔‍♂️ 35+ лет — для зрелого возраста
-  👥 Все возрасты — универсальный вариант
-  2. Уход (сложность ежедневной укладки)
-  💨 — не требует укладки
-  🪮 — лёгкая укладка
-  🧴 — нужна стайлинг-продукция
-  3. Периодичность коррекции (как часто нужно обновлять)
-  🗓️ — раз в месяц
-  ⏳ — держит форму долго
-  🔁 — требует частого обновления
-  4. Формальность (насколько уместна в деловой обстановке)
-  💼 — деловой стиль
-  👔 — универсально
-  🧢 — повседневно
-  5. Тип волос (для какой структуры волос идеальна)
-  ➿ — вьющиеся
-  〰️ — прямые
-  🔁 — любые
-  6. Форма лица (каким формам лица наиболее подходит)
-  🔵 — круглое
-  ⬛ — квадратное
-  🔷 — ромбовидное
-  ⭕ — универсально
-*/
 
 watch(promptForm, (newValue) => {
-  console.log(newValue);
-
+  console.log("Updated promptForm:", newValue);
 }, { deep: true })
 
 function submit() {
   emit("submit", promptForm.value)
 }
-
-// function openYclients() {
-//   router.()
-// }
 </script>
 <template>
   <ClientOnly>
     <v-stepper v-model="currentStep" :items="stepperItems" next-text="далее" prev-text="назад" mobile>
+      <!-- 2. Обновляем шаблон, чтобы использовать .display для текста и .value для ключа -->
       <template v-slot:item.1>
         <v-sheet>
           <v-responsive class="overflow-y-auto">
             <p class="text-2xl font-medium mb-4">{{ stepperItems[0] }}</p>
 
             <v-chip-group v-model="universal" selected-class="text-primary" multiple column>
-              <v-chip v-for="tag in selectVariants.universal" :key="tag" :text="tag" density="default"></v-chip>
+              <v-chip v-for="tag in selectVariants.universal" :key="tag.value" :text="tag.display"
+                density="default"></v-chip>
             </v-chip-group>
           </v-responsive>
         </v-sheet>
@@ -184,7 +164,8 @@ function submit() {
             <p class="text-2xl font-medium mb-4">{{ stepperItems[1] }}</p>
 
             <v-chip-group v-model="hairStyling" selected-class="text-primary" multiple column>
-              <v-chip v-for="tag in selectVariants.hairStyling" :key="tag" :text="tag" density="default"></v-chip>
+              <v-chip v-for="tag in selectVariants.hairStyling" :key="tag.value" :text="tag.display"
+                density="default"></v-chip>
             </v-chip-group>
           </v-responsive>
         </v-sheet>
@@ -196,7 +177,8 @@ function submit() {
             <p class="text-2xl font-medium mb-4">{{ stepperItems[2] }}</p>
 
             <v-chip-group v-model="haircutFrequency" selected-class="text-primary" multiple column>
-              <v-chip v-for="tag in selectVariants.haircutFrequency" :key="tag" :text="tag" density="default"></v-chip>
+              <v-chip v-for="tag in selectVariants.haircutFrequency" :key="tag.value" :text="tag.display"
+                density="default"></v-chip>
             </v-chip-group>
           </v-responsive>
         </v-sheet>
@@ -208,7 +190,8 @@ function submit() {
             <p class="text-2xl font-medium mb-4">{{ stepperItems[3] }}</p>
 
             <v-chip-group v-model="formalStyle" selected-class="text-primary" column>
-              <v-chip v-for="tag in selectVariants.formalStyle" :key="tag" :text="tag" density="default"></v-chip>
+              <v-chip v-for="tag in selectVariants.formalStyle" :key="tag.value" :text="tag.display"
+                density="default"></v-chip>
             </v-chip-group>
           </v-responsive>
         </v-sheet>
@@ -220,7 +203,8 @@ function submit() {
             <p class="text-2xl font-medium mb-4">{{ stepperItems[4] }}</p>
 
             <v-chip-group v-model="hairType" selected-class="text-primary" column>
-              <v-chip v-for="tag in selectVariants.hairType" :key="tag" :text="tag" density="default"></v-chip>
+              <v-chip v-for="tag in selectVariants.hairType" :key="tag.value" :text="tag.display"
+                density="default"></v-chip>
             </v-chip-group>
           </v-responsive>
         </v-sheet>
@@ -232,7 +216,8 @@ function submit() {
             <p class="text-2xl font-medium mb-4">{{ stepperItems[5] }}</p>
 
             <v-chip-group v-model="faceShape" selected-class="text-primary" column>
-              <v-chip v-for="tag in selectVariants.faceShape" :key="tag" :text="tag" density="default"></v-chip>
+              <v-chip v-for="tag in selectVariants.faceShape" :key="tag.value" :text="tag.display"
+                density="default"></v-chip>
             </v-chip-group>
           </v-responsive>
         </v-sheet>
@@ -249,7 +234,8 @@ function submit() {
               </v-col>
               <v-col cols="12">
                 <v-chip-group v-model="additional" selected-class="text-primary" column multiple>
-                  <v-chip v-for="tag in selectVariants.additional" :key="tag" :text="tag" density="default"></v-chip>
+                  <v-chip v-for="tag in selectVariants.additional" :key="tag.value" :text="tag.display"
+                    density="default"></v-chip>
                 </v-chip-group>
               </v-col>
               <v-col cols="12" class="d-flex justify-center">
