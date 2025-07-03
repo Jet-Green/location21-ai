@@ -95,12 +95,14 @@ async function copy(cropDescription: string) {
   5. Тип волос (для какой структуры волос идеальна)
   6. Форма лица (каким формам лица наиболее подходит)
   */
-  textToCopy += `1. Универсальность: ${promptForm.value?.universal ?? 'нет предпочтений'}\n`
-  textToCopy += `2. Уход: ${promptForm.value?.hairStyling ?? 'нет предпочтений'}\n`
-  textToCopy += `3. Периодичность коррекции: ${promptForm.value?.haircutFrequency ?? 'нет предпочтений'}\n`
-  textToCopy += `4. Формальность: ${promptForm.value?.formalStyle ?? 'нет предпочтений'}\n`
-  textToCopy += `5. Тип волос: ${promptForm.value?.hairType ?? 'нет предпочтений'}\n`
-  textToCopy += `6. Форма лица: ${promptForm.value?.faceShape ?? 'нет предпочтений'}\n`
+  // short copy, 150 letters is limit
+  textToCopy += `${promptForm.value?.universal ? promptForm.value?.universal + '\n' : ""}`
+  textToCopy += `${promptForm.value?.hairStyling ? promptForm.value?.hairStyling + '\n' : ""}`
+  textToCopy += `${promptForm.value?.haircutFrequency ? promptForm.value?.haircutFrequency + '\n' : ""}`
+  textToCopy += `${promptForm.value?.formalStyle ? promptForm.value?.formalStyle + '\n' : ""}`
+  textToCopy += `${promptForm.value?.hairType ? promptForm.value?.hairType + '\n' : ""}`
+  textToCopy += `${promptForm.value?.faceShape ? promptForm.value?.faceShape + '\n' : ""}`
+
   textToCopy += additionalInfo.value;
 
   if (navigator.clipboard && navigator.clipboard.writeText) {
