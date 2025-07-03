@@ -24,7 +24,7 @@ let aiResponse = ref<{ id: string, description: string, images: string[] }[]>([
   }
 ])
 
-let formStatus = ref<'filling' | 'submitted' | 'finished'>('filling')
+let formStatus = ref<'filling' | 'submitted' | 'finished'>('finished')
 let promptForm = ref<PromptForm>()
 
 let additionalInfo = computed(() => {
@@ -84,7 +84,25 @@ function goToFormBeginning() {
   formStatus.value = 'filling'
 }
 
-async function copy(textToCopy: string) {
+async function copy(cropDescription: string) {
+  let copiedCropName = cropDescription.split('\n')[0] // cropDescription is "Buzz Cut(Ежик)\nОписание: Короткая маш..."
+  let textToCopy = `Название стрижки: ${copiedCropName} \nМой выбор:\n`;
+  /*
+  1. Универсальность (насколько подходит разным типам внешности и возрастам)
+  2. Уход (сложность ежедневной укладки)
+  3. Периодичность коррекции (как часто нужно обновлять)
+  4. Формальность (насколько уместна в деловой обстановке)
+  5. Тип волос (для какой структуры волос идеальна)
+  6. Форма лица (каким формам лица наиболее подходит)
+  */
+  textToCopy += `1. Универсальность: ${promptForm.value?.universal ?? 'нет предпочтений'}\n`
+  textToCopy += `2. Уход: ${promptForm.value?.hairStyling ?? 'нет предпочтений'}\n`
+  textToCopy += `3. Периодичность коррекции: ${promptForm.value?.haircutFrequency ?? 'нет предпочтений'}\n`
+  textToCopy += `4. Формальность: ${promptForm.value?.formalStyle ?? 'нет предпочтений'}\n`
+  textToCopy += `5. Тип волос: ${promptForm.value?.hairType ?? 'нет предпочтений'}\n`
+  textToCopy += `6. Форма лица: ${promptForm.value?.faceShape ?? 'нет предпочтений'}\n`
+  textToCopy += additionalInfo.value;
+
   if (navigator.clipboard && navigator.clipboard.writeText) {
     await navigator.clipboard.writeText(textToCopy)
     toast("Скопировано!", {
@@ -135,7 +153,7 @@ async function copy(textToCopy: string) {
 
                 <v-col cols="12" class="d-flex justify-end">
                   <v-btn density="comfortable" color="accent" size="x-large" variant="tonal"
-                    @click="copy(crop.description + additionalInfo)">
+                    @click="copy(crop.description)">
                     скопировать
                   </v-btn>
                 </v-col>
