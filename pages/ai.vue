@@ -24,7 +24,7 @@ let aiResponse = ref<{ id: string, description: string, images: string[] }[]>([
   }
 ])
 
-let formStatus = ref<'filling' | 'submitted' | 'finished'>('finished')
+let formStatus = ref<'filling' | 'submitted' | 'finished'>('filling')
 let promptForm = ref<PromptForm>()
 let copyResultDialog = ref(false)
 
